@@ -1,4 +1,12 @@
 <?php
+if (file_exists(__DIR__ . '/../../config/load_env.php')) {
+    require __DIR__ . '/../../config/load_env.php';
+}
+$dbHost = getenv('DB_HOST') ?: 'localhost';
+$dbName = getenv('DB_NAME') ?: 'pauny';
+$dbUser = getenv('DB_USERNAME') ?: 'root';
+$dbPass = getenv('DB_PASSWORD') ?: '';
+
 return [
     'settings' => [
         'displayErrorDetails' => true,
@@ -16,9 +24,9 @@ return [
         // Configuración de mi APP
         'app_token_name'   => 'APP-TOKEN',
         'connectionString' => [
-            'dns'  => 'mysql:host=192.168.0.110;dbname=pauny',
-            'user' => 'root',
-            'pass' => 'Factupar2020!A'
+            'dns'  => 'mysql:host=' . $dbHost . ';dbname=' . $dbName . ';charset=utf8',
+            'user' => $dbUser,
+            'pass' => $dbPass
         ]
     ],
 ];

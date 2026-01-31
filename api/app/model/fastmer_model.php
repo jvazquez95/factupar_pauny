@@ -117,14 +117,17 @@ class FastmerModel
     }
 
 
-    public function usuarioPrueba(){ 
-
-       $sql = "INSERT INTO USUARIO (email , clave) VALUES ( 'rojasarmando260@gmail.com' , 'eeec1c4f966e9600288bf09aec426cd00c9b53f7bb7b194e0b19073e884e6297' )"; 
+    public function usuarioPrueba(){
+       $email = getenv('TEST_USER_EMAIL') ?: '';
+       $hash  = getenv('TEST_USER_PASSWORD_HASH') ?: '';
+       if ($email === '' || $hash === '') { exit('Configure TEST_USER_EMAIL y TEST_USER_PASSWORD_HASH en .env'); }
+       $sql = "INSERT INTO USUARIO (email , clave) VALUES ( :email , :clave )"; 
 
 
       try {
-
            $stmt = $this->db->prepare($sql);
+           $stmt->bindParam(':email', $email);
+           $stmt->bindParam(':clave', $hash);
            $stmt->execute();
 
            exit("USUARIO CREADO"); 

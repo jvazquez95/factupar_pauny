@@ -1,4 +1,5 @@
-﻿<?php
+<?php
+if (file_exists(__DIR__ . '/../../../../../config/load_env.php')) { require __DIR__ . '/../../../../../config/load_env.php'; }
 // Specify domains from which requests are allowed
 header('Access-Control-Allow-Origin: *');
 
@@ -25,7 +26,7 @@ $idventanew = $_GET['idventanew'];
 $clavehash = $_GET['clavehash'];
 $to = $_GET['para'];//$_POST['to'];
 $tiposervicio = 'simple';
-$hashcarpeta = '27780fe22be9b06abe1cd960889300db';
+$hashcarpeta = getenv('HASH_CARPETA_FACTURA') ?: '';
 $URL = "http://robsa.com.py/'.$tiposervicio.'/'.$hashcarpeta.'/reportes/exFacturaWeb.php?hash='.$clavehash.'";
 //$cuenta = $_POST['cuenta'];
 //Este bloque es importante
@@ -38,8 +39,8 @@ $mail->Host = "smtp.gmail.com";
 $mail->Port = 465;
 $mail->CharSet = "UTF-8";
 //Nuestra cuenta
-$mail->Username ='juniorroni.vazquez95@gmail.com';
-$mail->Password = 'azwnredvovtypgjv';
+$mail->Username = getenv('SMTP_USERNAME') ?: '';
+$mail->Password = getenv('SMTP_PASSWORD') ?: '';
 $mail->isHTML(true);
 
 $mensaje = '

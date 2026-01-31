@@ -1164,10 +1164,10 @@ public function recuperarPasswordInterno($data)
                 $mail = new PHPMailer(true);
                 $mail->SMTPDebug = 0;                               
                 $mail->isSMTP();            
-                $mail->Host = "smtp.gmail.com";
+                $mail->Host = getenv('SMTP_HOST') ?: "smtp.gmail.com";
                 $mail->SMTPAuth = true;                          
-                $mail->Username = "idealbox.atc@gmail.com";                 
-                $mail->Password = "caxjbsfgoxdnyvyb";                           
+                $mail->Username = getenv('SMTP_USERNAME') ?: "";                 
+                $mail->Password = getenv('SMTP_PASSWORD') ?: "";                           
                 $mail->SMTPSecure = "tls";                           
                 $mail->Port = 587;                                   
                 $mail->setFrom('no-reply@robsa.com.py');
@@ -5338,7 +5338,7 @@ function ActualizarTelefono($data){
             //$url = 'https://vpos.infonet.com.py/vpos/api/0.3/single_buy';
 
             $v_public_key = 'ozBiLvvbbStA5uNUfutZNeBuWQOTg5NA';
-            $v_private_key = 'dBZzbbt4Nk1TyVZ9C2aJ4rd+Lg(le6Zyq)3WFQiv';
+            $v_private_key = getenv('APP_PRIVATE_KEY') ?: '';
 
 
             $v_token = md5($v_private_key . $shop_process_id . $amount . "PYG");
@@ -5425,7 +5425,7 @@ function ActualizarTelefono($data){
             //$url = 'https://vpos.infonet.com.py/vpos/api/0.3/single_buy';
 
             $v_public_key = 'ozBiLvvbbStA5uNUfutZNeBuWQOTg5NA';
-            $v_private_key = 'dBZzbbt4Nk1TyVZ9C2aJ4rd+Lg(le6Zyq)3WFQiv';
+            $v_private_key = getenv('APP_PRIVATE_KEY') ?: '';
 
 
             $v_token = md5($v_private_key . $shop_process_id . $amount . "PYG");
@@ -5510,7 +5510,7 @@ function ActualizarTelefono($data){
             //$url = 'https://vpos.infonet.com.py/vpos/api/0.3/cards/new';       
 
             $v_public_key = 'ozBiLvvbbStA5uNUfutZNeBuWQOTg5NA';
-            $v_private_key = 'dBZzbbt4Nk1TyVZ9C2aJ4rd+Lg(le6Zyq)3WFQiv';
+            $v_private_key = getenv('APP_PRIVATE_KEY') ?: '';
 
             $cadena = $v_private_key . $card_id . $user_id . "request_new_card";
             $v_token = md5(  $cadena );
@@ -5590,7 +5590,7 @@ function ActualizarTelefono($data){
           //$url = "https://vpos.infonet.com.py/vpos/api/0.3/users/$user_id/cards";
 
             $v_public_key = 'ozBiLvvbbStA5uNUfutZNeBuWQOTg5NA';
-            $v_private_key = 'dBZzbbt4Nk1TyVZ9C2aJ4rd+Lg(le6Zyq)3WFQiv';
+            $v_private_key = getenv('APP_PRIVATE_KEY') ?: '';
 
             $v_token = md5($v_private_key . $user_id . "request_user_cards");
 
@@ -5663,7 +5663,7 @@ function ActualizarTelefono($data){
             $url = 'https://vpos.infonet.com.py/vpos/api/0.3/charge';
             //$url = 'https://vpos.infonet.com.py/vpos/api/0.3/charge';
             $v_public_key = 'ozBiLvvbbStA5uNUfutZNeBuWQOTg5NA';
-            $v_private_key = 'dBZzbbt4Nk1TyVZ9C2aJ4rd+Lg(le6Zyq)3WFQiv';
+            $v_private_key = getenv('APP_PRIVATE_KEY') ?: '';
 
             $v_token = md5($v_private_key.$shop_process_id."charge".$amount."PYG".$alias_token);
 
@@ -5748,7 +5748,7 @@ function ActualizarTelefono($data){
           //$url = 'https://vpos.infonet.com.py/vpos/api/0.3/single_buy/confirmations';
 
             $v_public_key = 'ozBiLvvbbStA5uNUfutZNeBuWQOTg5NA';
-            $v_private_key = 'dBZzbbt4Nk1TyVZ9C2aJ4rd+Lg(le6Zyq)3WFQiv';
+            $v_private_key = getenv('APP_PRIVATE_KEY') ?: '';
 
             $v_token = md5($v_private_key.$shop_process_id."get_confirmation");
 
@@ -5811,7 +5811,7 @@ function ActualizarTelefono($data){
             //$url = 'https://vpos.infonet.com.py/vpos/api/0.3/single_buy/rollback';
 
             $v_public_key = 'ozBiLvvbbStA5uNUfutZNeBuWQOTg5NA';
-            $v_private_key = 'dBZzbbt4Nk1TyVZ9C2aJ4rd+Lg(le6Zyq)3WFQiv';
+            $v_private_key = getenv('APP_PRIVATE_KEY') ?: '';
 
             $v_token = md5($v_private_key.$shop_process_id."rollback"."0.00");
 
@@ -5889,7 +5889,7 @@ function ActualizarTelefono($data){
             //$url = "https://vpos.infonet.com.py/vpos/api/0.3/users/$user_id/cards";
 
             $v_public_key = 'ozBiLvvbbStA5uNUfutZNeBuWQOTg5NA';
-            $v_private_key = 'dBZzbbt4Nk1TyVZ9C2aJ4rd+Lg(le6Zyq)3WFQiv';
+            $v_private_key = getenv('APP_PRIVATE_KEY') ?: '';
 
             $v_token = md5($v_private_key."delete_card".$user_id.$alias_token);
 

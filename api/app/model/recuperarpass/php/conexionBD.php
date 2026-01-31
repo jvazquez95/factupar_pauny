@@ -15,8 +15,12 @@ foreach ($paramConexion as $p)
 	$password = trim($password);
 
 try{
-	// Se conecta con exito
-	$dbh = new PDO('mysql:host=localhost;dbname=c1fastmer_new','root', 's3guridad2015!A');
+	if (file_exists(__DIR__ . '/../../../../../config/load_env.php')) { require __DIR__ . '/../../../../../config/load_env.php'; }
+	$dbHost = getenv('DB_HOST') ?: 'localhost';
+	$dbName = getenv('DB_NAME_FASTMER') ?: 'c1fastmer_new';
+	$dbUser = getenv('DB_USERNAME') ?: 'root';
+	$dbPass = getenv('DB_PASSWORD') ?: '';
+	$dbh = new PDO('mysql:host='.$dbHost.';dbname='.$dbName, $dbUser, $dbPass);
 	
 	}catch(PDOException $e)
 	{ //se encontro un error y no se logro conectar a la base de datos.

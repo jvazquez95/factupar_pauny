@@ -1,7 +1,6 @@
-﻿<?php
-
+<?php
+if (file_exists(__DIR__ . '/../../../../../config/load_env.php')) { require __DIR__ . '/../../../../../config/load_env.php'; }
 // Specify domains from which requests are allowed
-
 header('Access-Control-Allow-Origin: *');
 
 
@@ -69,8 +68,8 @@ $mail->Port = 465;
 $mail->CharSet = "UTF-8";
 
 //Nuestra cuenta
-$mail->Username ='fastmerriders@robsa.com.py';
-$mail->Password = '74yEyTfF#';
+$mail->Username = getenv('SMTP_USERNAME') ?: '';
+$mail->Password = getenv('SMTP_PASSWORD') ?: '';
 
 $mail->isHTML(true);
 
