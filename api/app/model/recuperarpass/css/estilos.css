@@ -1,0 +1,55 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+body {
+  background: url(../images/bg.png) repeat;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.wrap { 
+  margin: 0 auto;
+  width: 80%;
+}
+
+header {
+	background: #9900AA;
+	padding: 20px 0;
+	margin: 15px 0;
+	text-align: center;
+	font-size: 33px;
+	color: #99ff00;
+	border-radius: 10px;
+	line-height: 35px;
+	width: 100%;
+}
+
+#principal{
+	margin-bottom:10px;
+	background: #fdac00;
+	padding: 20px 0;
+	border-radius: 10px;
+	width: 100%;
+}
+
+.campos, .campos label, .campos input, .campos textarea{
+	float:left;
+	padding: 0px;
+	width: 100%;
+}
+
+#formulario{
+	border-radius: 10px;
+	margin: 0 auto;
+	padding:10px 20px 10px 10px;
+	border: 1px solid;
+	overflow:hidden;
+	width: 35%;
+}
+
+nav{background: red; border-radius: 10px; float: left; height: 10%; width: 20%;}
+
+
+#submit{ width: 80px; margin-top:11px; }

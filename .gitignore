@@ -1,0 +1,54 @@
+# Credenciales: solo .env (config lee de .env; Conexion.php y global.php sí se suben)
+# No quitar .env del ignore
+
+# Dependencias
+api/vendor/
+api/serviciosEstable/vendor/
+node_modules/
+vistas/vendor/
+
+# Archivos subidos por usuarios (mantener estructura con .gitkeep)
+files/usuarios/*
+!files/usuarios/.gitkeep
+files/articulos/*
+!files/articulos/.gitkeep
+files/logo/*
+!files/logo/.gitkeep
+files/direcciones/*
+!files/direcciones/.gitkeep
+files/gif/*
+!files/gif/.gitkeep
+
+# Logs y caché
+*.log
+logs/
+api/logs/*.log
+api/serviciosEstable/logs/*.log
+cache/
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Entorno y secretos
+.env
+.env.local
+.env.*.local
+*.pem
+
+# APK y binarios
+app.apk
+*.apk
+
+# IDE y sistema
+.idea/
+.vscode/
+*.sublime-*
+*.swp
+*.swo
+*~
+
+# Composer (opcional: descomentar si no quieres subir lock)
+# composer.lock
+
+# Bower (opcional: descomentar si regeneras con bower install)
+# public/bower_components/

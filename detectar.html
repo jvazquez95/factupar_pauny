@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detección de Cargadores</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        video, canvas { width: 80%; height: auto; }
+        .counter { font-size: 24px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Detección de Cargadores</h1>
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas"></canvas>
+    <div class="counter">Cargadores detectados: <span id="chargerCount">0</span></div>
+
+    <script>
+        async function startDetection() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const chargerCountElement = document.getElementById('chargerCount');
+
+            // Acceder a la cámara y manejar errores
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => { 
+                    video.srcObject = stream; 
+                }).catch(error => {
+                    console.error("Error al acceder a la cámara:", error);
+                    alert("No se pudo acceder a la cámara. Verifica los permisos.");
+                });
+
+            // Cargar el modelo COCO-SSD
+            const model = await cocoSsd.load();
+
+            async function detectChargers() {
+                const predictions = await model.detect(video);
+
+                // Filtrar solo objetos similares a cargadores (No hay una clase exacta)
+                const chargers = predictions.filter(pred => 
+                    pred.class === "cell phone" || 
+                    pred.class === "power adapter" || 
+                    pred.class === "remote"
+                );
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                chargers.forEach(prediction => {
+                    ctx.beginPath();
+                    ctx.rect(...prediction.bbox);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'red';
+                    ctx.fillStyle = 'red';
+                    ctx.stroke();
+                    ctx.fillText("Cargador (" + Math.round(prediction.score * 100) + "%)", prediction.bbox[0], prediction.bbox[1] - 5);
+                });
+
+                chargerCountElement.innerText = chargers.length;
+                requestAnimationFrame(detectChargers);
+            }
+
+            video.onloadeddata = detectChargers;
+        }
+
+        startDetection();
+    </script>
+</body>
+</html>

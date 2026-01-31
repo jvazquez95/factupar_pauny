@@ -1,0 +1,79 @@
+.nav-item a {
+  font-size: 15px !important;
+}
+.nombre_empresa {}
+.navbar-toggler {}
+.navbar-header {}
+
+/* Menú profesional: logo y espaciado */
+.navbar-pauny .navbar-brand {
+  padding: 8px 16px;
+  margin-right: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.navbar-pauny .navbar-brand img {
+  height: 40px;
+  width: auto;
+  border-radius: 6px;
+  object-fit: contain;
+}
+.navbar-pauny .navbar-nav .nav-link {
+  padding: 12px 14px !important;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.navbar-pauny .navbar-nav > li {
+  padding: 0 2px !important;
+}
+.navbar-pauny .dropdown-menu {
+  padding: 6px 0;
+  min-width: 200px;
+}
+.navbar-pauny .dropdown-item {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+}
+
+@media screen and (max-width: 710px) {
+  button.navbar-toggler {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 992px) and (min-width: 570px) {
+  .navbar-toggler {
+    display: none;
+  }
+  .n-menu-i {
+    flex-direction: row !important;
+    -ms-flex-direction: row;
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+  }
+  .navbar-expand-lg .navbar-collapse {
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -ms-flex-preferred-size: auto !important;
+    flex-basis: auto !important;
+  }
+  .navbar-expand-lg .navbar-nav .dropdown-menu {
+    position: absolute;
+  }
+  .navbar-expand-lg .navbar-nav {
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+  .navbar-expand-lg {
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+  }
+  .navbar-nav > li {
+    padding: 6px !important;
+  }
+}

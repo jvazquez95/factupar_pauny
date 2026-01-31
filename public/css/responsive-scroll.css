@@ -1,0 +1,94 @@
+/**
+ * Responsive scroll - CRUDs y tablas en móvil/tablet
+ * Asegura scroll horizontal en tablas y scroll vertical en la página.
+ */
+
+/* Permitir scroll en la página (AdminLTE .wrapper tiene overflow:hidden) */
+.wrapper {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  min-height: 100vh;
+  -webkit-overflow-scrolling: touch;
+}
+
+html {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  min-height: 100%;
+}
+
+/* Contenido principal: no recortar en móvil */
+.content-wrapper {
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  min-height: 0;
+}
+
+/* Tablas: scroll horizontal en móvil/tablet */
+.table-responsive,
+.panel-body.table-responsive,
+#listadoregistros.table-responsive,
+div.table-responsive {
+  overflow-x: auto !important;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  display: block;
+}
+
+/* DataTables wrapper */
+.dataTables_wrapper,
+.dataTables_wrapper .dataTables_scroll,
+.dataTables_wrapper .dataTables_scrollHead,
+.dataTables_wrapper .dataTables_scrollBody {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.dataTables_wrapper .dataTables_scrollBody {
+  overflow-y: auto !important;
+}
+
+/* Contenedores de listado que suelen tener tabla */
+#listadoregistros {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+/* Box/panel body que contiene tablas */
+.box .box-body .table-responsive,
+.panel-body .table-responsive {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Tablas dentro de .content o .panel-body sin .table-responsive (por si falta la clase) */
+.content .table,
+.panel-body .table,
+.box-body .table {
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  .content-wrapper {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .table-responsive,
+  #listadoregistros,
+  .dataTables_wrapper {
+    margin-left: -5px;
+    margin-right: -5px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}

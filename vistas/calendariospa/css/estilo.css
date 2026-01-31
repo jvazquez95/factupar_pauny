@@ -1,0 +1,104 @@
+        .block a:hover{
+            color: silver;
+        }
+        .block a{
+            color: #fff;
+        }
+        .block {
+            position: fixed;
+            background: #2184cd;
+            padding: 20px;
+            z-index: 1;
+            top: 240px;
+        }
+        .colend_indv
+        {
+            padding:0px !important;
+        }
+        .fc-right{
+            display:none;
+        }
+        .fc-toolbar{
+
+display: none !important;        }
+        .content {
+  width: 100%;
+  max-height: 500px;
+  overflow-y: scroll;
+  max-height: 100%;
+}
+.colend_indv > div{
+    display:inline-flex;
+}
+body{overflow-x:hidden;}
+.content{
+    margin-left: 98px !important;
+    overflow-x:hidden;
+}
+
+.container56{
+    max-width:100%;
+    margin:0 auto;
+}
+
+.fc-time-grid-container{
+height: 100% !important;  }
+
+
+/*CALENDARIO ESTILOS PROPIOS BOOTSTRAP*/
+
+
+*{
+    font-family:"Montserrat", "arial" !important;
+}
+
+#empleado1,#empleado2,#empleado3,#empleado4,#empleado5,#empleado6,#empleado7{
+    text-align:center;
+    min-height:50px;    font-weight: bolder;
+    border: solid 1px #dddddd;
+    width: 100%;
+    display: inline-block;
+}
+
+#boton_calendar{
+    font-weight:700;
+/*    padding:10px;
+*/    min-width:120px;
+border: transparent 1px;
+border-radius:30px;
+text-align:center;
+margin: 0 auto;
+background: rgba(130,183,240,1);
+background: -moz-linear-gradient(left, rgba(130,183,240,1) 0%, rgba(0,107,189,1) 100%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(130,183,240,1)), color-stop(100%, rgba(0,107,189,1)));
+background: -webkit-linear-gradient(left, rgba(130,183,240,1) 0%, rgba(0,107,189,1) 100%);
+background: -o-linear-gradient(left, rgba(130,183,240,1) 0%, rgba(0,107,189,1) 100%);
+background: -ms-linear-gradient(left, rgba(130,183,240,1) 0%, rgba(0,107,189,1) 100%);
+background: linear-gradient(to right, rgba(130,183,240,1) 0%, rgba(0,107,189,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#82b7f0', endColorstr='#006bbd', GradientType=1 );
+}
+
+
+   
+
+#boton_calendar.active.focus, #boton_calendar.active:focus, #boton_calendar.focus, #boton_calendar:active.focus, #boton_calendar:active:focus, #boton_calendar:focus,.btn:focus {
+    outline: 0px auto -webkit-focus-ring-color !important;
+    outline-offset: 0px !important;   outline: none !important;
+   box-shadow: none;
+}
+
+
+.event_bo566{
+    margin-bottom:34px;
+}
+#calendar_2 .fc-axis,#calendar_3 .fc-axis,#calendar_4 .fc-axis,#calendar_5 .fc-axis,#calendar_6 .fc-axis,#calendar_7 .fc-axis
+
+{
+    display:none !important; 
+}
+
+
+.bootstrap-datetimepicker-widget 
+{
+    background:red;
+}

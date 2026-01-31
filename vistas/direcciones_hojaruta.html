@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ruta Optimizada (tramos ≤ 25 pts)</title>
+
+  <!-- Tailwind + DataTables -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
+  <!-- Google Maps JS + geometry -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVbCmKkfBfmcsC5zjkk70WttiFIcxdWHI&libraries=geometry"></script>
+  <script src="https://unpkg.com/@googlemaps/markerclusterer@2.5.6/dist/index.min.js"></script>
+
+  <style>
+    #map{height:600px;width:100%}
+    .button-overlay{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:1000}
+    #navigateButton{background:#4caf50;color:#fff;padding:10px 20px;border-radius:8px;font-weight:bold}
+    #imageModal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;justify-content:center;align-items:center;z-index:9999}
+    #imageModal img{max-height:90%;max-width:90%;border-radius:8px;box-shadow:0 0 20px #000}
+  </style>
+
+  <script>const ROUTES_KEY='AIzaSyBVbCmKkfBfmcsC5zjkk70WttiFIcxdWHI';</script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+<div class="container mx-auto p-6">
+  <h1 class="text-2xl font-bold mb-6">Ruta Optimizada (IA + tráfico)</h1>
+
+  <form id="filterForm" class="flex flex-wrap gap-4 bg-white p-4 shadow rounded-lg mb-6">
+    <div>
+      <label class="block text-sm font-medium">Vehículo</label>
+      <select id="vehiculo" class="mt-1 block w-full p-2 border rounded"></select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium">Día</label>
+      <select id="diaSemana" class="mt-1 block w-full p-2 border rounded">
+        <option value="">Seleccionar Día</option>
+        <option value="lunes">Lunes</option><option value="martes">Martes</option>
+        <option value="miercoles">Miércoles</option><option value="jueves">Jueves</option>
+        <option value="viernes">Viernes</option><option value="sabado">Sábado</option>
+        <option value="domingo">Domingo</option>
+      </select>
+    </div>
+    <button type="submit" class="mt-6 bg-blue-600 text-white px-4 py-2 rounded">Buscar</button>
+  </form>
+
+  <div class="relative mb-8">
+    <div id="map"></div>
+    <button id="navigateButton" class="button-overlay" onclick="startNavigation()">Navegar</button>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-4">Paradas</h2>
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <table id="resultTable" class="display w-full">
+      <thead>
+        <tr><th>#</th><th>Cliente</th><th>Lat</th><th>Lng</th><th>Imagen</th><th>Acción</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<div id="imageModal" class="flex"><img id="modalImage" /></div>
+
+<script>
+/* --------------------- variables globales --------------------- */
+let map, table;
+let markers   = [];
+let polylines = [];
+let lastStop  = null;
+
+/* --------------------- inicializar mapa ---------------------- */
+function initMap(){
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom:12, center:{lat:-25.35,lng:-57.55}
+  });
+
+  $('#filterForm').on('submit', e => { e.preventDefault(); cargarDatos(); });
+  $('#imageModal').on('click', ()=> $('#imageModal').hide());
+
+  table = $('#resultTable').DataTable();     // instancia única
+  cargarVehiculos();
+}
+
+/* ------------------ helpers de reseteo ----------------------- */
+function resetMapa(){
+  polylines.forEach(pl => pl.setMap(null));
+  polylines.length = 0;
+
+  markers.forEach(m => m.setMap(null));
+  markers.length = 0;
+
+  table.clear().draw();
+  lastStop = null;
+}
+
+/* ------------------ cargar combos ---------------------------- */
+function cargarVehiculos(){
+  $.post('https://mineraqua.com.py/mineraqua/api/public/usuario/reporte_vehiculos', data => {
+    data.forEach(v => $('#vehiculo').append(new Option(v.nombreReferencia, v.idVehiculo)));
+  }, 'json');
+}
+
+/* ------------------ Routes API helpers ----------------------- */
+const toLL = p => ({ latitude:p.lat, longitude:p.lng });
+
+async function computeOptimizedRoute(slice){
+  const body={
+    origin      :{location:{latLng:toLL(slice[0])}},
+    destination :{location:{latLng:toLL(slice.at(-1))}},
+    intermediates:slice.slice(1,-1).map(p=>({location:{latLng:toLL(p)}})),
+    travelMode:'DRIVE',
+    routingPreference:'TRAFFIC_AWARE',
+    optimizeWaypointOrder:true,
+    departureTime:new Date(Date.now()+5*60*1000).toISOString()
+  };
+  const res=await fetch(`https://routes.googleapis.com/directions/v2:computeRoutes?key=${ROUTES_KEY}`,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'X-Goog-FieldMask':'routes.polyline.encodedPolyline,routes.optimizedIntermediateWaypointIndex'
+    },
+    body:JSON.stringify(body)
+  });
+  if(!res.ok) throw await res.text();
+  return (await res.json()).routes[0];
+}
+
+async function optimizarEnTramos(stops){
+  const CHUNK=26, rutas=[], orden=[];
+  for(let off=0; off<stops.length-1; off+=CHUNK-1){
+    let slice=stops.slice(off,off+CHUNK);
+    if(slice.length<2) break;
+    if(off+CHUNK<stops.length) slice.push(stops[off+CHUNK]);
+
+    const r=await computeOptimizedRoute(slice); rutas.push(r);
+
+    const inter=r.optimizedIntermediateWaypointIndex?.map(i=>i+1)
+                 ?? (slice.length>2?Array.from({length:slice.length-2},(_,i)=>i+1):[]);
+    [0,...inter,slice.length-1].forEach(i=>orden.push(off+i));
+  }
+  const ordenFiltrado = orden.filter((v,i,a)=>i===0||v!==a[i-1]);
+  return {rutas, orden:ordenFiltrado};
+}
+
+/* ------------------ flujo principal -------------------------- */
+async function cargarDatos(){
+  resetMapa();   // ← limpia todo antes de dibujar nuevo resultado
+
+  const veh=$('#vehiculo').val(), dia=$('#diaSemana').val();
+  if(!veh||!dia){ alert('Seleccione vehículo y día'); return; }
+
+  const raw=await $.post('https://mineraqua.com.py/mineraqua/api/public/usuario/reporte_hr',
+                          {Vehiculo_idVehiculo:veh, diaSemana:dia}, null,'json');
+
+  const stops=raw.map(p=>({
+    lat:+p.latitud, lng:+p.longitud, nom:p.nombreComercial, img:p.imagen
+  })).filter(p=>p.lat>-40 && p.lat<0 && p.lng>-70 && p.lng<-50);
+
+  if(stops.length<2){ alert('No hay suficientes puntos válidos'); return; }
+
+  try{
+    const {rutas, orden} = await optimizarEnTramos(stops);
+    dibujarSegmentos(rutas, orden, stops);
+  }catch(e){
+    console.error(e); alert('No se pudo optimizar la ruta');
+  }
+}
+
+/* ------------------ dibujar resultado ------------------------ */
+function dibujarSegmentos(rutas, orden, stops){
+  rutas.forEach(r=>{
+    const path=google.maps.geometry.encoding.decodePath(r.polyline.encodedPolyline);
+    const pl=new google.maps.Polyline({path,map,strokeColor:'#007bff',strokeWeight:5});
+    polylines.push(pl);
+  });
+
+  const bounds=new google.maps.LatLngBounds();
+  orden.forEach((idx,n)=>{
+    const p=stops[idx];
+    const m=new google.maps.Marker({position:p,map,label:`${n+1}`});
+    markers.push(m); bounds.extend(m.getPosition());
+
+    table.row.add([
+      n+1,
+      p.nom,
+      p.lat,
+      p.lng,
+      p.img ? `<button onclick="verImagen('${p.img}')" class="bg-blue-500 text-white px-2 py-1 rounded">Ver</button>` : '—',
+      n===0 ? 'Origen' : `<button onclick="trazarDesdeUbicacionActual(${p.lat},${p.lng})" class="bg-green-500 text-white px-2 py-1 rounded">Ir</button>`
+    ]);
+  });
+  table.draw();
+
+  map.fitBounds(bounds); if(map.getZoom()>16) map.setZoom(16);
+
+  lastStop=stops.at(-1);
+}
+
+/* ------------------ utilidades UI ---------------------------- */
+function verImagen(u){
+  $('#modalImage').attr('src',u); $('#imageModal').show();
+}
+function trazarDesdeUbicacionActual(lat,lng){
+  if(!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const url=`https://www.google.com/maps/dir/?api=1&origin=${pos.coords.latitude},${pos.coords.longitude}&destination=${lat},${lng}`;
+    window.open(url,'_blank');
+  });
+}
+function startNavigation(){
+  if(!lastStop) return;
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const url=`https://www.google.com/maps/dir/?api=1&origin=${pos.coords.latitude},${pos.coords.longitude}&destination=${lastStop.lat},${lastStop.lng}`;
+    window.open(url,'_blank');
+  });
+}
+
+/* ------------------ arranque ------------------ */
+google.maps.event.addDomListener(window,'load',initMap);
+</script>
+
+</body>
+</html>

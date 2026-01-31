@@ -1,0 +1,19 @@
+create or replace FUNCTION "admin"."f_sacar_ceros" (@pmonto VARCHAR(17))  returns DECIMAL(17)
+begin  	
+declare @resultado		DECIMAL(17);  	   	
+
+set @resultado = convert(int,@pmonto);     	
+return(@resultado);    
+end;
+
+
+
+
+create or replace FUNCTION "admin"."f_rellenar_ceros" (@pmonto DECIMAL(15,2))  returns varchar(19)
+begin  	
+declare @resultado		varchar(17);  	   	
+
+set @resultado = RIGHT('00000000000000000' + ltrim(rtrim(replace(@pmonto,'.00',''))),17);     	
+return(@resultado);    
+end;
+

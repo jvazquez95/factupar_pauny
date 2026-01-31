@@ -1,0 +1,21 @@
+{
+  "short_name": "Nombre Corto",
+  "name": "Nombre Completo de la Aplicación",
+  "icons": [
+    {
+      "src": "icono-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icono-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#000000"
+}

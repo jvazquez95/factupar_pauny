@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Ingreso - Pauny | Sistema de Gestión</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Acceso al sistema de gestión Pauny - Tractores y maquinaria">
+	<link rel="icon" type="image/x-icon" href="images/icons/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<style>
+		/* Colores Tu Pauny: amarillo/dorado como en tu.pauny.com.ar */
+		:root {
+			--pauny-amarillo: #e5a00d;
+			--pauny-amarillo-oscuro: #b8860b;
+			--pauny-amarillo-claro: #fef3c7;
+			--pauny-gris: #374151;
+			--pauny-gris-claro: #6b7280;
+		}
+		.login-page {
+			background: #fafafa;
+			background-image: linear-gradient(180deg, #fffbeb 0%, #fefce8 30%, #fafafa 100%);
+			min-height: 100vh;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 2rem 1rem;
+		}
+		.login-card {
+			background: #fff;
+			border-radius: 12px;
+			box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+			border-top: 4px solid var(--pauny-amarillo);
+			overflow: hidden;
+			max-width: 400px;
+			width: 100%;
+		}
+		.login-card .card-body {
+			padding: 2rem 2rem 1.75rem;
+		}
+		.login-logo-wrap {
+			text-align: center;
+			margin-bottom: 1.5rem;
+		}
+		.login-logo {
+			display: block;
+			margin: 0 auto 0.75rem;
+			max-width: 160px;
+			max-height: 100px;
+			width: auto;
+			height: auto;
+			object-fit: contain;
+		}
+		.login-title {
+			font-family: Poppins-Bold, sans-serif;
+			font-size: 1.75rem;
+			color: var(--pauny-amarillo-oscuro);
+			text-align: center;
+			margin: 0 0 0.25rem;
+			letter-spacing: -0.02em;
+		}
+		.login-subtitle {
+			font-family: Poppins-Regular, sans-serif;
+			font-size: 0.875rem;
+			color: var(--pauny-gris-claro);
+			text-align: center;
+			margin: 0 0 1.5rem;
+		}
+		.login-alert {
+			display: none !important;
+			padding: 0.75rem 1rem;
+			border-radius: 8px;
+			margin-bottom: 1rem;
+			font-size: 0.875rem;
+			align-items: center;
+			gap: 0.5rem;
+		}
+		.login-alert.show { display: flex !important; visibility: visible !important; opacity: 1 !important; }
+		.login-alert.error {
+			background: #fef2f2;
+			color: #b91c1c;
+			border: 1px solid #fecaca;
+		}
+		.login-alert .fa { flex-shrink: 0; }
+		.login-page .wrap-input100 { border-bottom-color: #e5e7eb; }
+		.login-page .wrap-input100:focus-within { border-bottom-color: var(--pauny-amarillo); }
+		.login-page .input100:focus + .focus-input100::after,
+		.login-page .has-val.input100 + .focus-input100::after { color: var(--pauny-amarillo) !important; }
+		.login-page .input100:focus + .focus-input100::before,
+		.login-page .has-val.input100 + .focus-input100::before { background: var(--pauny-amarillo) !important; }
+		.login-page .label-input100 { color: var(--pauny-gris); }
+		.login-page .login100-form-bgbtn { display: none; }
+		.login-page .wrap-login100-form-btn:hover .login100-form-bgbtn { display: none; }
+		.btn-login {
+			width: 100%;
+			padding: 0.875rem 1.5rem;
+			font-family: Poppins-SemiBold, sans-serif;
+			font-size: 1rem;
+			border-radius: 8px;
+			background: var(--pauny-amarillo);
+			border: none;
+			color: #1f2937;
+			transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+		}
+		.btn-login:hover:not(:disabled) {
+			background: var(--pauny-amarillo-oscuro);
+			color: #fff;
+			transform: translateY(1px);
+			box-shadow: 0 4px 12px rgba(229, 160, 13, 0.4);
+		}
+		.btn-login:disabled {
+			opacity: 0.9;
+			cursor: not-allowed;
+			background: var(--pauny-amarillo);
+			color: #1f2937;
+		}
+		.btn-login .spinner-border {
+			width: 1.1rem;
+			height: 1.1rem;
+			vertical-align: middle;
+			margin-right: 0.5rem;
+			border-color: currentColor transparent transparent transparent;
+		}
+		.password-toggle {
+			position: absolute;
+			right: 12px;
+			top: 50%;
+			transform: translateY(-50%);
+			background: none;
+			border: none;
+			color: var(--pauny-gris-claro);
+			cursor: pointer;
+			padding: 0.25rem;
+			z-index: 2;
+		}
+		.password-toggle:hover { color: var(--pauny-amarillo-oscuro); }
+		.input-group-login { position: relative; }
+		.input-group-login .input100 { padding-right: 44px; }
+		.login-footer {
+			text-align: center;
+			margin-top: 1.5rem;
+			font-size: 0.75rem;
+			color: var(--pauny-gris-claro);
+		}
+		.login-footer a { color: var(--pauny-amarillo-oscuro); text-decoration: none; }
+		.login-footer a:hover { text-decoration: underline; }
+		/* Barra de error fija arriba - siempre visible, no tapada por nada */
+		.login-error-bar {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 2147483647;
+			background: #b91c1c;
+			color: #fff;
+			padding: 14px 48px 14px 16px;
+			text-align: center;
+			font-size: 15px;
+			font-weight: 500;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+			min-height: 48px;
+			align-items: center;
+			justify-content: center;
+		}
+		.login-error-bar.show,
+		.login-error-bar[style*="display: block"] { display: block !important; }
+		.login-error-bar .login-error-close {
+			position: absolute;
+			right: 12px;
+			top: 50%;
+			transform: translateY(-50%);
+			background: transparent;
+			border: none;
+			color: #fff;
+			cursor: pointer;
+			font-size: 18px;
+			opacity: 0.9;
+		}
+		.login-error-bar .login-error-close:hover { opacity: 1; }
+		.login-error-bar .login-error-msg { padding-right: 32px; }
+	</style>
+</head>
+<body>
+	<div id="loginErrorBar" class="login-error-bar" role="alert">
+		<span class="login-error-msg" id="loginErrorBarText"></span>
+		<button type="button" class="login-error-close" id="loginErrorBarClose" aria-label="Cerrar">&times;</button>
+	</div>
+	<div class="limiter">
+		<div class="container-login100 login-page">
+			<div class="wrap-login100 login-card">
+				<div class="card-body">
+					<form method="post" id="frmAcceso" class="login100-form validate-form">
+						<div class="login-logo-wrap">
+							<img src="../files/logo/logo.jpg" class="login-logo" alt="Pauny" width="160" height="100">
+							<h1 class="login-title">Pauny</h1>
+							<p class="login-subtitle">Sistema de Gestión</p>
+						</div>
+
+						<div id="loginAlert" class="login-alert error" role="alert">
+							<i class="fa fa-exclamation-circle"></i>
+							<span id="loginAlertText">Usuario y/o contraseña incorrectos.</span>
+						</div>
+
+						<div class="wrap-input100 validate-input m-b-23" data-validate="El usuario es requerido">
+							<span class="label-input100">Usuario</span>
+							<div class="input-group-login">
+								<input class="input100" id="logina" type="text" name="logina" placeholder="Ingrese su nombre de usuario" autocomplete="username">
+								<span class="focus-input100" data-symbol="&#xf206;"></span>
+							</div>
+						</div>
+
+						<div class="wrap-input100 validate-input" data-validate="La contraseña es requerida">
+							<span class="label-input100">Contraseña</span>
+							<div class="input-group-login">
+								<input class="input100" id="clavea" type="password" name="clavea" placeholder="Escriba su contraseña" autocomplete="current-password">
+								<button type="button" class="password-toggle" id="togglePassword" title="Mostrar contraseña" aria-label="Mostrar contraseña">
+									<i class="fa fa-eye" id="togglePasswordIcon"></i>
+								</button>
+								<span class="focus-input100" data-symbol="&#xf190;"></span>
+							</div>
+						</div>
+
+						<div class="container-login100-form-btn" style="margin-top: 1.5rem;">
+							<div class="wrap-login100-form-btn" style="box-shadow: 0 4px 14px rgba(229, 160, 13, 0.3); border-radius: 8px; overflow: hidden;">
+								<button type="submit" class="login100-form-btn btn-login" id="btnIngresar">
+									<span id="btnIngresarText">Ingresar</span>
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<p class="login-footer">© <span id="currentYear"></span> Pauny · Desarrollado por <a href="https://api.whatsapp.com/send?phone=595985726478">Factupar Software</a></p>
+		</div>
+	</div>
+
+	<div id="dropDownSelect1"></div>
+
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="scripts/login.js"></script>
+	<script src="vendor/animsition/js/animsition.min.js"></script>
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="vendor/select2/select2.min.js"></script>
+	<script src="vendor/daterangepicker/moment.min.js"></script>
+	<script src="vendor/daterangepicker/daterangepicker.js"></script>
+	<script src="vendor/countdowntime/countdowntime.js"></script>
+	<script src="js/main.js"></script>
+	<script>
+		document.getElementById('currentYear').textContent = new Date().getFullYear();
+	</script>
+</body>
+</html>

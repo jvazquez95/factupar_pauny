@@ -1,0 +1,639 @@
+<?php
+//Activamos el almacenamiento en el buffer
+ob_start();
+session_start();
+
+if (!isset($_SESSION["almacen"]))
+{
+  header("Location: login.html");
+}
+else
+{
+require 'header.php';
+requierePermisoVista(basename(__FILE__, '.php'));
+if ($_SESSION['personas']==1)
+{
+?>
+<!--Contenido-->
+      <!-- Content Wrapper. Contains page content -->
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+              <div class="col-md-12">
+                  <div class="box">
+                    <div class="box-header with-border">
+                          <h1 class="box-title">Conductores <button class="btn btn-success" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button></h1>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- centro -->
+                    <div class="panel-body table-responsive" id="listadoregistros">
+                        <table id="tbllistado">
+                          <thead>
+                            <th>Opciones</th>
+                            <th>Razon social</th>
+                            <th>Nombre comercial</th>
+                            <th>Tipo documento</th>
+                            <th>Nro. Documento</th>
+                            <th>Email</th>
+                            <th>Ciudad</th>
+                            <th>Nacimiento</th>
+                            <th>Telefonos</th>
+                            <th>Direcciones</th>
+                            <th>Vehiculos</th>
+                            <th>Documentos Personales</th>
+                            <th>Zimple</th>
+                            <th>Robsa</th>
+                            <th>Estado</th>
+                          </thead>
+                          <tbody>                            
+                          </tbody>
+                          <tfoot>          
+                            <th>Opciones</th>
+                            <th>Razon social</th>
+                            <th>Nombre comercial</th>
+                            <th>Tipo documento</th>
+                            <th>Nro. Documento</th>
+                            <th>Email</th>
+                            <th>Ciudad</th>
+                            <th>Nacimiento</th>
+                            <th>Telefonos</th>
+                            <th>Direcciones</th>
+                            <th>Vehiculos</th>
+                            <th>Documentos Personales</th>
+                            <th>Zimple</th>
+                            <th>Robsa</th>
+                            <th>Estado</th>
+                          </tfoot>
+                        </table>
+                    </div>
+                    <div class="panel-body" style="height: 400px;" id="formularioregistros">
+                        <form name="formulario" id="formulario" method="POST">
+                          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Razon social:</label>
+                            <input type="hidden" name="idPersona" id="idPersona">
+                            <input type="text" class="form-control" name="razonSocial" id="razonSocial" maxlength="250" placeholder="Nombre del cliente" required>
+                          </div>
+                          
+                          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Nombre comercial:</label>
+                            <input type="text" class="form-control" name="nombreComercial" id="nombreComercial" maxlength="250" placeholder="Nombre comercial" required>
+                          </div>
+
+                          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Tipo Documento:</label>
+                            <select class="form-control select-picker" name="tipoDocumento" id="tipoDocumento" required>
+                              <option value="1">RUC</option>
+                              <option value="2">CEDULA</option>
+                              <option value="3">DOCUMENTO EXTRANJERO</option>
+                            </select>
+                          </div>
+
+                          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Número Documento:</label>
+                            <input type="text" class="form-control" name="nroDocumento" id="nroDocumento" maxlength="20" placeholder="Documento" required>
+                          </div> 
+
+                          <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Email:</label>
+                            <input type="email" class="form-control" name="mail" id="mail" maxlength="50" placeholder="Email">
+                          </div>
+
+                          <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Nacimiento:</label>
+                            <input type="date" class="form-control" name="fechaNacimiento" id="fechaNacimiento" maxlength="50" placeholder="fechaNacimiento">
+                          </div>
+
+                          <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Regimen de Turismo:</label>
+                            <select class="form-control select-picker" name="regimenTurismo" id="regimenTurismo" required>
+                              <option value="2">No</option>
+                              <option value="1">Si</option>
+                            </select>
+                          </div>
+
+                          <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Tipo de Empresa:</label>
+                            <select class="form-control select-picker" name="tipoEmpresa" id="tipoEmpresa" required>
+                              <option value="1">Privada</option>
+                              <option value="2">Pública</option>
+                            </select>
+                          </div>
+
+
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <br>
+                          <div class="row">
+                                  <div class="col-md-12">
+
+                                    <div class="box box-danger">
+                                    <div class="box-header with-border">
+                                      <h3 class="box-title">Tipo de Persona</h3><button type="button" class="btn btn-primary btn-xs" onclick="crud('grupoPersona')"><i class="fa fa-pagelines">Nuevo Grupo Persona</i></button>
+                                      <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                      </div>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                      <div class="row">
+                                        <div class="col-md-12">
+                                          <div class="form-group">
+
+                                                <div class="form-group col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                    <label class=" input-sm">Tipo de Persona:</label>
+                                                        <select id="TipoPersona_idTipoPersona_l" onchange="personalizar(this);" name="TipoPersona_idTipoPersona_l" class="form-control input-sm selectpicker" data-live-search="true" required><option value="1">Cliente</option><option value="1">Proveedora</option></select>
+                                                      </div>
+
+
+                                                      <div class="form-group col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <label class=" input-sm">Termino de Pago Habilitado:</label>
+                                                        <select id="terminoPago_l" name="terminoPago_l" class="form-control input-sm selectpicker" data-live-search="true" required></select>
+
+                                                      </div>
+
+
+
+                                                      <div class="form-group col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <label class=" input-sm">Grupo Persona</label>
+                                                        <select id="GrupoPersona_idGrupoPersona_l" name="GrupoPersona_idGrupoPersona_l" class="form-control input-sm selectpicker" data-live-search="true" required><option value="1">San Vicente</option><option value="1">San Juan</option><option value="1">Sajonia</option></select>
+                                        
+                                                      </div>
+
+                                                      <div id="divone">
+                                                        <div class="form-group col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                          <label class=" input-sm">Cuenta a Pagar:</label>
+                                                          <input type="text" class="form-control input-sm " name="cuentaAPagar_l" id="cuentaAPagar_l" maxlength="256" placeholder="" required="">
+                                                        </div>
+
+                                                        <div class="form-group col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                          <label class=" input-sm">Cuenta anticipo:</label>
+                                                          <input type="text" class="form-control input-sm " name="cuentaAnticipo_l" id="cuentaAnticipo_l" maxlength="256" placeholder="" required="">
+                                                        </div>
+                                                      </div>
+                                                      
+                                                      <div id="divtwo">
+
+                                                        <div class="form-group col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                          <label class=" input-sm">Comision:</label>
+                                                          <input type="text" class="form-control input-sm" name="comision_l" id="comision_l">
+                                                        </div>
+
+                                                        <div class="form-group col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                          <label class=" input-sm">Salario:</label>
+                                                          <input type="text" class="form-control input-sm " name="salario_l" id="salario_l" maxlength="256" placeholder="">
+                                                        </div>
+                                                      </div>
+
+                                                      <button type="button" class="btn btn-info btn-block btn-xs"  onclick="addDetalleTipoPersona()" ><i class="fa fa-plus-circle"></i> Agregar</button>
+
+                                                      <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12  table-responsive" >
+                                                        <table id="detalleTipoPersona" class="table display compact responsive">
+                                                          <thead >
+                                                                <th>Opciones</th>
+                                                                <th>Tipo de Persona</th>
+                                                                <th>Termino de Pago</th>
+                                                                <th>Grupo</th>
+                                                                <th>Cuenta a Pagar</th>
+                                                                <th>Cuenta Anticipo</th>
+                                                                <th>Comision</th>
+                                                                <th>Salario</th>
+                                                            </thead>
+                                                            <tfoot>
+                                                                <th>Opciones</th>
+                                                                <th>Tipo de Persona</th>
+                                                                <th>Termino de Pago</th>
+                                                                <th>Grupo</th>
+                                                                <th>Cuenta a Pagar</th>
+                                                                <th>Cuenta Anticipo</th>
+                                                                <th>Comision</th>
+                                                                <th>Salario</th>
+                                                            </tfoot>
+                                                            <tbody>
+
+                                                            </tbody>
+                                                        </table>
+                                                      </div>
+                                                  </div>
+                                        </div>
+                                        <!-- /.col -->
+                                      </div>
+                                      <!-- /.row -->
+                                    </div>
+                                  </div>
+                                  <!-- /.box-default -->
+                                </div>
+                              </div>
+
+                          <div class="row"> 
+                                  <div class="col-md-12">
+
+                                    <div class="box box-danger">
+                                    <div class="box-header with-border">
+                                      <h3 class="box-title">Direcciones</h3><button type="button" class="btn btn-primary btn-xs" onclick="crud('tipoDireccionTelefono')"><i class="fa fa-pagelines">Nuevo Tipo de Direccion</i></button><button type="button" class="btn btn-primary btn-xs" onclick="crud('ciudad')"><i class="fa fa-pagelines">Nueva Ciudad </i></button><button type="button" class="btn btn-primary btn-xs" onclick="crud('barrio')"><i class="fa fa-pagelines">Nuevo Barrio</i></button>
+                                      <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                      </div>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                      <div class="row">
+                                        <div class="col-md-12">
+                                          <div class="form-group">
+
+                                                <div class="form-group col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                    <label class=" input-sm">Tipo de Direccion:</label>
+                                                        <select id="TipoDireccion_Telefono_idTipoDireccion_Telefono_l" name="TipoDireccion_Telefono_idTipoDireccion_Telefono_l" class="form-control input-sm selectpicker" data-live-search="true" required><option value="1">Particular</option><option value="2">Laboral</option></select>
+                                                      </div>
+
+
+                                                      <div class="form-group col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <label class=" input-sm">Ciudad:</label>
+                                                        <select id="Ciudad_idCiudad_l" name="Ciudad_idCiudad_l" class="form-control input-sm selectpicker" data-live-search="true" required><option value="1">PJC</option><option value="2">Asuncion</option><option value="3">Luque</option></select>
+
+                                                      </div>
+
+
+                                                      <div class="form-group col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <label class=" input-sm">Barrio:</label>
+                                                        <select id="Barrio_idBarrio_l" name="Barrio_idBarrio_l" class="form-control input-sm selectpicker" data-live-search="true" required><option value="1">San Vicente</option><option value="2">San Juan</option><option value="3">Sajonia</option></select>
+                                        
+                                                      </div>
+
+                                                      <div class="form-group col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                        <label class=" input-sm">Calle Principal/Email:</label>
+                                                        <input type="text" class="form-control input-sm" name="callePrincipal_l" id="callePrincipal_l" maxlength="256" placeholder="">
+                                                      </div>
+
+                                                      <div class="form-group col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                        <label class=" input-sm">Calle Transversal:</label>
+                                                        <input type="text" class="form-control input-sm" name="calleTransversal_l" id="calleTransversal_l" maxlength="256" placeholder="">
+                                                      </div>
+
+                                                      <div class="form-group col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                        <label class=" input-sm">Nro. de casa:</label>
+                                                        <input type="text" class="form-control input-sm" name="nroCasa_l" id="nroCasa_l" maxlength="256" placeholder="">
+                                                      </div>
+
+                                                      <div class="form-group col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <label class=" input-sm">Latitud:</label>
+                                                        <input type="text" class="form-control input-sm search_latitude" name="longitud_l" id="longitud_l" maxlength="256" placeholder="">
+                                                      </div>
+
+                                                      <div class="form-group col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                        <label class=" input-sm">Longitud:</label>
+                                                        <input type="text" class="form-control input-sm search_longitude" name="latitud_l" id="latitud_l" maxlength="256" placeholder="">
+                                                      </div>
+
+
+                                                        <form class="formulario_467784">
+                                                          <div class="form-group input-group">
+                                                          <input type="hidden" id="search_location" class="form-control input-sm" value=" Asunción, Paraguay" placeholder="Agregar dirección completa">
+                                                          </div>
+                                                          <div class="form-group col-lg-1 col-md-1 col-sm-1 col-xs-12">
+                                                          <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal">Seleccionar ubicación</button>  
+
+                                                          <!-- Modal SELECCIONAR UBICACION -->
+                                                          <div class="modal " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                              <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                  <h4 class="modal-title" id="exampleModalLabel">Seleccionar ubicación</h4>
+                                                                  <p>Selecciona la ubicación en el mapa de abajo</p>
+                                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                  </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                          <div id="map" style="height:400px !important; width:100% !important;"></div>
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                  <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+                                                          <!--         <button type="button" class="btn btn-primary">Guardar cambios</button>
+                                                           -->  </div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                      </div>
+                                  <!-- <p>Dirección: <input type="text" class="search_addr" size="45"></p>
+                                   --><div id="geomap"></div>
+                                        <button type="button" class="btn btn-info btn-block btn-xs"  onclick="addDetalleDireccion()" ><i class="fa fa-plus-circle"></i> Agregar</button>
+                          <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
+                            <table id="detalleDireccion" class="table display compact">
+                              <thead>
+                                    <th>Opciones</th>
+                                    <th>Tipo de Direccion</th>
+                                    <th>Ciudad</th>
+                                    <th>Barrio</th>
+                                    <th>Calle Principal</th>
+                                    <th>Calle Transversal</th>
+                                    <th>Nro. de casa</th>
+                                    <th>Latitud</th>
+                                    <th>Longitud</th>
+                                </thead>
+                                <tfoot>
+                                    <th>Opciones</th>
+                                    <th>Tipo de Direccion</th>
+                                    <th>Ciudad</th>
+                                    <th>Barrio</th>
+                                    <th>Calle Principal</th>
+                                    <th>Calle Transversal</th>
+                                    <th>Nro. de casa</th>
+                                    <th>Latitud</th>
+                                    <th>Longitud</th>
+                                </tfoot>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                          </div>
+
+
+                                        </div>
+                                        </div>
+                                        <!-- /.col -->
+                                      </div>
+                                      <!-- /.row -->
+                                    </div>
+                                  </div>
+                                  <!-- /.box-default -->
+                              </div>
+                              </div>
+
+                               <div class="row">
+                                  <div class="col-md-12">
+
+                                    <div class="box box-danger">
+                                    <div class="box-header with-border">
+                                      <h3 class="box-title">Telefonos</h3><button type="button" class="btn btn-primary btn-xs" onclick="addDireccion()"><i class="fa fa-pagelines">Nuevo Tipo de Direccion</i></button><button type="button" class="btn btn-primary btn-xs" onclick="addDireccion()"><i class="fa fa-pagelines">Nueva Ciudad </i></button><button type="button" class="btn btn-primary btn-xs" onclick="addDireccion()"><i class="fa fa-pagelines">Nuevo Barrio</i></button>
+                                      <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                      </div>
+                                    </div>
+                                    <!-- /.box-header -->
+                                    <div class="box-body">
+                                      <div class="row">
+                                        <div class="col-md-12">
+                                          <div class="form-group">
+                                                           <div class="form-group col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                    <label class=" input-sm">Tipo de Telefono:</label>
+                                                        <select id="TipoDireccion_Telefono_idTipoDireccion_Telefono_tel_l" name="TipoDireccion_Telefono_idTipoDireccion_Telefono_tel_l" class="form-control input-sm selectpicker" data-live-search="true" required><option>Particular</option><option>Laboral</option></select>
+                                                      </div>
+
+                                                      <div class="form-group col-lg-2 col-md-2 col-sm-3 col-xs-12">
+                                                        <label class=" input-sm">Telefono:</label>
+                                                        <input type="text" class="form-control input-sm" name="telefono_l" id="telefono_l" maxlength="256" placeholder="">
+                                                      </div>
+
+                                                      <button type="button" class="btn btn-info btn-block"  onclick="addDetalleTelefono()" ><i class="fa fa-plus-circle"></i> Agregar</button>
+
+
+                                                    <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12 table-responsive">
+                                                      <table id="detalleTelefono" class="table display compact">
+                                                        <thead >
+                                                              <th>Opciones</th>
+                                                              <th>Tipo Telefono</th>
+                                                              <th>Nro de Telefono</th>
+                                                          </thead>
+                                                          <tfoot>
+                                                              <th></th>
+                                                              <th></th>
+                                                              <th></th>
+                                                          </tfoot>
+                                                          <tbody>
+                                                          </tbody>
+                                                      </table>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                        <!-- /.col -->
+                                              </div>
+                                      <!-- /.row -->
+                                          </div>
+                                        </div>
+                                  <!-- /.box-default -->
+                                    </div>
+                              </div> 
+
+                          <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <button class="btn btn-primary" onclick="guardaryeditar()" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
+
+                            <button class="btn btn-danger" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
+                          </div>
+                        </form>
+                    </div>
+                    <!--Fin centro -->
+                  </div><!-- /.box -->
+              </div><!-- /.col -->
+          </div><!-- /.row -->
+      </section><!-- /.content -->
+
+    <div class="container">
+         <style>
+        </style>
+        <!-- The Modal -->
+        <div class="modal " id="modal_detalle_telefonos">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <!-- Modal body -->
+              <div class="modal-body">
+                  <span>Detalle de Telefono:<input type="text" disabled name="detalle5" id="detalle5" /> </span>
+              <table id="tbllistado5" class="table table-striped table-bordered table-condensed table-hover">
+                <thead>
+                  <th>Tipo</th>
+                  <th>Telefono</th>
+                  <th>fecha de Modificacion</th>
+                  <th>fecha de Insercion</th>
+                </thead>
+                <tbody>                            
+                </tbody>
+                <tfoot>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tfoot>
+              </table>
+              </div>
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="container">
+         <style>
+        </style>
+        <!-- The Modal -->
+        <div class="modal " id="modal_detalle_vehiculos">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <!-- Modal body -->
+              <div class="modal-body">
+                  <span>Detalle de Vehiculo:<input type="text" disabled name="detalle4" id="detalle4" /> </span>
+              <table id="tbllistado4" class="table table-striped table-bordered table-condensed table-hover">
+                <thead>
+                  <th>matricula</th>
+                  <th>Anho</th>
+                  <th>Vencimiento</th>
+                  <th>comentario</th>
+                  <th>tipo Vehiculo</th>
+                </thead>
+                <tbody>                            
+                </tbody>
+                <tfoot>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tfoot>
+              </table>
+              </div>
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <div class="container">
+         <style>
+        </style>
+        <!-- The Modal -->
+        <div class="modal " id="modal_detalle_direccion">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <!-- Modal body -->
+              <div class="modal-body">
+                  <span>Detalle de Direccion:<input type="text" disabled name="detalle7" id="detalle7" /> </span>
+              <table id="tbllistado7" class="table table-striped table-bordered table-condensed table-hover">
+                <thead>
+                  <th>Calle Principal</th>
+                  <th>Calle Transversal</th>
+                  <th>Nro de Casa</th>
+                  <th>Fecha de Insercion</th>
+                  <th>Tipo de Direccion</th>
+                  <th>Longitud</th>
+                  <th>Latitud</th>                                     
+                </thead>
+                <tbody>                            
+                </tbody>
+                <tfoot>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tfoot>
+              </table>
+              </div>
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="container">
+         <style > 
+
+        </style> 
+        <!-- The Modal -->
+        <div class="modal" id="modal_detalle_documento">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <!-- Modal body -->   
+              <div class="modal-body">
+                  <span>Detalle de Documentos:<input type="text" disabled name="detalle8" id="detalle8" /> </span>
+              <table id="tbllistado8" class="table table-striped table-bordered table-condensed table-hover">
+                <thead>   
+                  <th>CI Frontal</th>
+                  <th>CI Trasera</th>
+                  <th>comentario CI</th>
+                  <th>estado CI</th>
+                  <th>venc CI</th>
+                  <th>Lic Cond Frontal</th>
+                  <th>Lic Cond Trasera</th> 
+               <!--  <th>comentarioLicenciaConducir</th>
+                  <th>estadoLicenciaConducir</th>
+                  <th>vencimientoLicenciaConducir</th>
+                  <th>imagenAntecedentePolicial</th>
+                  <th>comentarioAntecedente</th>
+                  <th>estadoAntecedente</th>
+                  <th>vencimientoAntecedente</th>      -->                                                                                  
+                </thead> 
+                <tbody>                            
+                </tbody> 
+                <tfoot>   
+                  <th></th> 
+                  <th></th> 
+                  <th></th> 
+                  <th></th> 
+                  <th></th> 
+                  <th></th> 
+                  <th></th> 
+               <!--   
+                  <th></th> 
+                  <th></th> 
+                  <th></th> 
+                  <th></th> 
+                  <th></th> 
+                  <th></th>      -->                                                         
+                </tfoot>
+              </table>
+              </div>
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+ 
+  <!--Fin-Contenido-->
+<?php
+}
+else
+{
+  require 'noacceso.php';
+}
+require 'footer.php';
+?>
+
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<!-- AGREGAR SCRIPT GOOGLE APIS -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0-PDFVLZN75GpsCirzkuCd5SICkZFrsw"></script>
+<script type="text/javascript" src="scripts/conductor.js"></script>
+
+
+<?php 
+}
+ob_end_flush();
+?>
